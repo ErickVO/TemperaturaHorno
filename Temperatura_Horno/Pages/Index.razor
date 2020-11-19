@@ -1,0 +1,139 @@
+﻿@page "/"
+
+@using System.Threading;
+
+<div class="card-body">
+
+    <div class="form-group">
+        <label>Cantidad de Combustible:</label>
+        <input type="number" @bind="Cantidad" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Tipo de Combustible</label>
+        <select @bind="TCombustible" class="form-control">
+            <option value="0">Nada</option>
+            <option value="1">Madera</option>
+            <option value="2">Hoja</option>
+            <option value="4">Carbon</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Velocidad de la cinta</label>
+        <input type="number" @bind="Velocidad" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Temperatura del Horno</label>
+        <input type="text" @bind="TempHorno" readonly />
+    </div>
+    <div class="form-group form-inline">
+        <label>Encender Horno</label>
+        <input type="checkbox" @bind="Encender" class="form-control" readonly />
+    </div>
+    <div class="form-group form-inline">
+        <label>Apagar Horno</label>
+        <input type="checkbox" @bind="Apagar" class="form-control" readonly />
+    </div>
+
+</div>
+
+@code{
+
+    public double Cantidad { get; set; }
+    public string TCombustible { get; set; }
+    public double Velocidad { get; set; }
+    public double TempHorno { get; set; }
+    public bool Encender { get; set; }
+    public bool Apagar { get; set; }
+
+    public Timer Tiempo { get; set; }
+
+    double Madera = 4500, Hoja = 1500, Carbon = 7500, Ambiente = 30, cantidad = 0,c;
+    double resultado;
+
+    protected override void OnInitialized()
+    {
+        Cantidad = 0;
+        Velocidad = 0;
+        TCombustible = "0";
+        Velocidad = 0;
+        TempHorno = 30;
+
+        Tiempo = new Timer(_ =>
+        {
+            InvokeAsync(() =>
+            {
+                Calcular();
+                StateHasChanged();
+            });
+        }, null, 1000, 2000);
+    }
+
+    private void Calcular()
+    {
+        cantidad = Cantidad;
+
+
+        if (Encender == true)
+        {
+            if (TCombustible == "1" && Velocidad < 5)
+            {
+                resultado = (cantidad * Madera) / 300;
+                resultado = resultado / (Ambiente * 0.3);
+
+                cantidad = cantidad + (cantidad / Velocidad)*0.100;
+
+                resultado = resultado * (Velocidad/100);
+
+                TempHorno = resultado + TempHorno;
+            }
+            else if(TCombustible == "2" && Velocidad < 2)
+            {
+                resultado = (Cantidad * Hoja) / 120;
+
+                resultado = resultado * (Ambiente * 0.3);
+
+                cantidad = cantidad + (cantidad / Velocidad) * 0.100;
+
+                resultado = resultado * (Velocidad / 100);
+
+                TempHorno = resultado + TempHorno;
+            }
+            else if(TCombustible == "3" && Velocidad < 20)
+            {
+                resultado = (Cantidad) * Carbon / 1200;
+
+                resultado = resultado * (Ambiente * 0.3);
+
+                cantidad = cantidad + (cantidad / Velocidad) * 0.100;
+
+                TempHorno = resultado + TempHorno;
+            }
+            else if (TCombustible == "0" && TempHorno > 30)
+            {
+                TempHorno = resultado - (Ambiente / 100) + 1;
+            }
+            else
+            {
+                if (TempHorno > 30)
+                {
+                    TempHorno = resultado - (Ambiente / 100) + 1;
+                }
+                else
+                {
+
+                }
+
+            }
+        }
+
+
+
+
+    }
+
+
+
+}
