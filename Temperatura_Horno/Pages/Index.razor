@@ -1,8 +1,6 @@
 ﻿@page "/"
 
-@using System.Threading;
-
-@inject 
+@using System.Threading
 
 <div class="card-body">
 
@@ -17,7 +15,7 @@
             <option value="0">Nada</option>
             <option value="1">Madera</option>
             <option value="2">Hoja</option>
-            <option value="4">Carbon</option>
+            <option value="3">Carbon</option>
         </select>
     </div>
 
@@ -52,7 +50,7 @@
 
     public Timer Tiempo { get; set; }
 
-    double Madera = 4500, Hoja = 1500, Carbon = 7500, Ambiente = 30, cantidad = 0,c;
+    double Madera = 4500, Hoja = 1500, Carbon = 7500, Ambiente = 30, cantidad = 0;
     double resultado;
 
     protected override void OnInitialized()
